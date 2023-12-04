@@ -6,6 +6,7 @@
       "favTrack": "Circuit Zandvoort",
       "teamName": "Red Bull Racing",
       "photoURL": "https://i.insider.com/61af71277db53500184cc253?width=700",
+      "createdAt": "2023-12-04T13:20:06.286Z",
       "id": 1
     },
     {
@@ -14,8 +15,17 @@
       "favTrack": "Interlagos Circuit",
       "teamName": "Brawn GP",
       "photoURL": "https://d3cm515ijfiu6w.cloudfront.net/wp-content/uploads/2020/05/10111758/PA.7276085.jpg",
-      "createdAt": "2021-11-21T19:28:51.934Z",
+      "createdAt": "2023-12-04T13:20:06.286Z",
       "id": 2
+    },
+    {
+      "driverName": "Aldis Poga",
+      "racesWon": 2,
+      "favTrack": "Bikernieki",
+      "teamName": "Codelex",
+      "photoURL": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZHJpdmluZ3xlbnwwfHwwfHx8MA%3D%3D",
+      "createdAt": "2023-12-04T14:13:07.266Z",
+      "id": 11
     }
   ]
 }
