@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export type Driver = {
@@ -11,25 +11,42 @@ export type Driver = {
   createdAt: Date;
 };
 
-
 export const Create = () => {
   const [driverName, setDriverName] = useState('');
   const [racesWon, setRacesWon] = useState(0);
   const [favTrack, setFavTrack] = useState('');
   const [teamName, setTeamName] = useState('');
   const [photoURL, setPhotoUrl] = useState('');
-  const [createdAt, ] = useState(new Date());
+  const [createdAt] = useState(new Date());
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
+  // Post the driver to the db and clear the inputs
   const postDriver = () => {
-    axios.post<Driver>('http://localhost:3000/drivers', {
-      driverName: driverName,
-      racesWon: racesWon,
-      favTrack: favTrack,
-      teamName: teamName,
-      photoURL: photoURL,
-      createdAt: createdAt,
-    });
+    axios
+      .post<Driver>('http://localhost:3000/drivers', {
+        driverName: driverName,
+        racesWon: racesWon,
+        favTrack: favTrack,
+        teamName: teamName,
+        photoURL: photoURL,
+        createdAt: createdAt,
+      })
+      .then(() => {
+        setFormSubmitted(true);
+        setDriverName('');
+        setRacesWon(0);
+        setFavTrack('');
+        setTeamName('');
+        setPhotoUrl('');
+      });
   };
+
+  // Reload the page when the form is submitted
+  useEffect(() => {
+    if (formSubmitted) {
+      window.location.reload();
+    }
+  }, [formSubmitted]);
 
   return (
     <div className='create__wrapper'>

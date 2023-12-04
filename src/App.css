@@ -8,7 +8,9 @@
   background-color: rgb(10, 10, 37);
 }
 
-.heading-1, .heading-2, .heading-3 {
+.heading-1,
+.heading-2,
+.heading-3 {
   color: rgb(32, 35, 60);
   margin: 0;
 }
@@ -92,7 +94,7 @@
   margin-left: auto;
 }
 
-.driver-item__wrapper{ 
+.driver-item__wrapper {
   max-width: 500px;
   max-height: 800px;
   display: flex;

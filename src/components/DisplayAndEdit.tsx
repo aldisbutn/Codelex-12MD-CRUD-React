@@ -1,29 +1,24 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { Driver } from './Create';
 import axios from 'axios';
 
+interface DisplayAndEditProps {
+  deleteDriverAndUpdateCount: (id: number) => void;
+}
 
-export const DisplayAndEdit = () => {
+
+export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndUpdateCount }) => {
   const [APIdata, setAPIData] = useState<Driver[]>([]);
-  const [, setID] = useState<number | null>(null);
   const [editID, setEditID] = useState<number | null>(null);
   const [driverName, setDriverName] = useState('');
   const [racesWon, setRacesWon] = useState(0);
   const [favTrack, setFavTrack] = useState('');
   const [teamName, setTeamName] = useState('');
   const [photoURL, setPhotoUrl] = useState('');
-  const [createdAt, setCreatedAt] = useState(new Date());
+  const [, setCreatedAt] = useState(new Date());
 
-  useEffect(() => {
-    setID(Number(localStorage.getItem('ID')));
-    setDriverName(localStorage.getItem('Driver Name') || '');
-    setRacesWon(Number(localStorage.getItem('Races Won')) || 0);
-    setFavTrack(localStorage.getItem('Favorite Track') || '');
-    setTeamName(localStorage.getItem('Team Name') || '');
-    setPhotoUrl(localStorage.getItem('Photo URL') || '');
-  }, []);
-
+  // Get the initial data when the page loads
   useEffect(() => {
     axios.get<Driver[]>('http://localhost:3000/drivers').then((response) => {
       const driversWithDate = response.data.map((driver) => ({
@@ -34,6 +29,7 @@ export const DisplayAndEdit = () => {
     });
   }, []);
 
+  // Set the inputs when editing a driver(the value that already is there)
   const setDriver = (data: Driver) => {
     const { id, driverName, racesWon, favTrack, teamName, photoURL, createdAt } = data;
     setEditID(id);
@@ -45,10 +41,13 @@ export const DisplayAndEdit = () => {
     setCreatedAt(createdAt);
   };
 
+  // Driver edit
   const editDriver = () => {
     if (editID) {
+      // Store the driver in originalDriver(this is for accesing createdAt, we want it to stay the same always)
       const originalDriver = APIdata.find((driver) => driver.id === editID);
-  
+
+      // Put the edit info in the db
       if (originalDriver) {
         axios
           .put(`http://localhost:3000/drivers/${editID}`, {
@@ -57,20 +56,27 @@ export const DisplayAndEdit = () => {
             favTrack,
             teamName,
             photoURL,
-            createdAt: originalDriver.createdAt
+            createdAt: originalDriver.createdAt,
           })
+          // Update the state with the edited driver
           .then(() => {
-            axios.get<Driver[]>('http://localhost:3000/drivers').then((response) => setAPIData(response.data));
+            setAPIData((prevData) => {
+              const updatedData = prevData.map((driver) =>
+                driver.id === editID ? { ...driver, driverName, racesWon, favTrack, teamName, photoURL } : driver
+              );
+              return updatedData;
+            });
             setEditID(null);
           });
       }
     }
   };
-  
 
+  // Driver delete
   const deleteDriver = (id: number) => {
     axios.delete(`http://localhost:3000/drivers/${id}`).then(() => {
-      axios.get<Driver[]>('http://localhost:3000/drivers').then((response) => setAPIData(response.data));
+      deleteDriverAndUpdateCount(id);
+      setAPIData((prevData) => prevData.filter((driver) => driver.id !== id));
     });
   };
 
