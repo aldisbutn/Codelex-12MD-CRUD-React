@@ -8,7 +8,7 @@ export type Driver = {
   favTrack: string;
   teamName: string;
   photoURL: string;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export const Create = () => {
@@ -17,13 +17,13 @@ export const Create = () => {
   const [favTrack, setFavTrack] = useState('');
   const [teamName, setTeamName] = useState('');
   const [photoURL, setPhotoUrl] = useState('');
-  const [createdAt] = useState(new Date());
+  const [createdAt] = useState(new Date().toLocaleString());
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Post the driver to the db and clear the inputs
   const postDriver = () => {
     axios
-      .post<Driver>('http://localhost:3000/drivers', {
+      .post<Driver>('http://localhost:3002/drivers', {
         driverName: driverName,
         racesWon: racesWon,
         favTrack: favTrack,

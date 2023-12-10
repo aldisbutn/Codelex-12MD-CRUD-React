@@ -7,7 +7,6 @@ interface DisplayAndEditProps {
   deleteDriverAndUpdateCount: (id: number) => void;
 }
 
-
 export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndUpdateCount }) => {
   const [APIdata, setAPIData] = useState<Driver[]>([]);
   const [editID, setEditID] = useState<number | null>(null);
@@ -16,14 +15,14 @@ export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndU
   const [favTrack, setFavTrack] = useState('');
   const [teamName, setTeamName] = useState('');
   const [photoURL, setPhotoUrl] = useState('');
-  const [, setCreatedAt] = useState(new Date());
+  const [, setCreatedAt] = useState(new Date().toLocaleString());
 
   // Get the initial data when the page loads
   useEffect(() => {
-    axios.get<Driver[]>('http://localhost:3000/drivers').then((response) => {
+    axios.get<Driver[]>('http://localhost:3002/drivers').then((response) => {
       const driversWithDate = response.data.map((driver) => ({
         ...driver,
-        createdAt: new Date(driver.createdAt),
+        createdAt: new Date(driver.createdAt).toLocaleString(),
       }));
       setAPIData(driversWithDate);
     });
@@ -50,7 +49,7 @@ export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndU
       // Put the edit info in the db
       if (originalDriver) {
         axios
-          .put(`http://localhost:3000/drivers/${editID}`, {
+          .put(`http://localhost:3002/drivers/${editID}`, {
             driverName,
             racesWon,
             favTrack,
@@ -74,7 +73,7 @@ export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndU
 
   // Driver delete
   const deleteDriver = (id: number) => {
-    axios.delete(`http://localhost:3000/drivers/${id}`).then(() => {
+    axios.delete(`http://localhost:3002/drivers/${id}`).then(() => {
       deleteDriverAndUpdateCount(id);
       setAPIData((prevData) => prevData.filter((driver) => driver.id !== id));
     });
@@ -114,7 +113,7 @@ export const DisplayAndEdit: React.FC<DisplayAndEditProps> = ({ deleteDriverAndU
                 <h3 className='heading-2'>{data.teamName}</h3>
                 <hr />
                 <h2 className='heading-3'>Joined the Site</h2>
-                <p className='heading-2'>{formatDistanceToNow(data.createdAt)} ago</p>
+                <p className='heading-2'>{formatDistanceToNow(new Date(data.createdAt))} ago</p>
               </div>
               <div className='button__wrapper'>
                 <button onClick={() => deleteDriver(data.id)}>Delete</button>

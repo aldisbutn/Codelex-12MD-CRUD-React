@@ -10,20 +10,20 @@ const App = () => {
 
   // Get the initial driver count when the page loads
   useEffect(() => {
-    axios.get('http://localhost:3000/drivers').then((response) => {
+    axios.get('http://localhost:3002/drivers').then((response) => {
       setDriverCount(response.data.length);
     });
   }, []);
 
   // Function to delete a driver and update the driver count
   const deleteDriverAndUpdateCount = (id: number) => {
-    axios.delete(`http://localhost:3000/drivers/${id}`).then(() => {
-      axios.get('http://localhost:3000/drivers').then((response) => {
+    axios.delete(`http://localhost:3002/drivers/${id}`).then(() => {
+      axios.get('http://localhost:3002/drivers').then((response) => {
         setDriverCount(response.data.length);
       });
     });
   };
-  
+
   return (
     <>
       <Header driverCount={driverCount} />
